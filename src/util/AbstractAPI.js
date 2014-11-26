@@ -72,6 +72,8 @@ Ext.define('Jarvus.touch.util.AbstractAPI', {
 
                 if (options.autoDecode !== false && response.getResponseHeader('Content-Type') == 'application/json') {
                     response.data = Ext.decode(response.responseText, true);
+
+                    me.fireEvent('responsedecoded', response.data);
                 }
 
                 //Calling the callback function sending the decoded data
