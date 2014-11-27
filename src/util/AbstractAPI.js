@@ -22,7 +22,7 @@ Ext.define('Jarvus.touch.util.AbstractAPI', {
          * @cfg {Boolean}
          * True to use HTTPS when prefixing hostname. Only used if {@link #cfg-hostname} is set
          */
-        useSSL: false,
+        useSSL: null,
 
         /**
          * @cfg {Boolean}
@@ -36,8 +36,15 @@ Ext.define('Jarvus.touch.util.AbstractAPI', {
      * @template
      */
     buildUrl: function(path, options) {
-        var hostname = this.getHostname();
-        return hostname ? (this.getUseSSL() ? 'https://' : 'http://')+hostname+path : path;
+        var me = this,
+            hostname = me.getHostname(),
+            useSSL = me.getUseSSL();
+
+        if (useSSL === null) {
+            useSSL = location.protocol == 'https:';
+        }
+
+        return hostname ? (useSSL ? 'https://' : 'http://') + hostname + path : path;
     },
 
     /**
