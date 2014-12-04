@@ -4,7 +4,7 @@
 /**
  * @abstract
  * An abstract class for singletons that facilitates communication with backend services
- * 
+ *
  * TODO:
  * - add events for all lifecycle events: beforerequest, request, beforexception, exception, unauthorized
  */
@@ -80,7 +80,7 @@ Ext.define('Jarvus.touch.util.AbstractAPI', {
                 if (options.autoDecode !== false && response.getResponseHeader('Content-Type') == 'application/json') {
                     response.data = Ext.decode(response.responseText, true);
 
-                    me.fireEvent('responsedecoded', response.data);
+                    me.fireEvent('responsedecoded', response.data || {}, true, response);
                 }
 
                 //Calling the callback function sending the decoded data
@@ -91,8 +91,10 @@ Ext.define('Jarvus.touch.util.AbstractAPI', {
 
                 if (options.autoDecode !== false && response.status > 0 && response.getResponseHeader('Content-Type') == 'application/json') {
                     response.data = Ext.decode(response.responseText, true);
+
+                    me.fireEvent('responsedecoded', response.data || {}, false, response);
                 }
-                
+
                 if (response.aborted) {
                     Ext.callback(options.abort, options.scope, [response]);
                     return;
